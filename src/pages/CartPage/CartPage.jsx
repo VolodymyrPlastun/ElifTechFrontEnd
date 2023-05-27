@@ -1,38 +1,45 @@
 import { Box, Button, Typography } from '@mui/material';
-import PizzaList from 'components/PizzaList/PizzaList';
+import ShopDrawer from 'components/ShopDrawer';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { clearCart, calculateTotal } from 'redux/features/cart/cartSlice';
-import { Container, PriceText, PriceTotal, TextBox } from './CartPage.styled';
-import { useEffect } from 'react';
+import { calculateTotal } from 'redux/features/cart/cartSlice';
+import { createOrder } from '../../api';
+import {
+  Container,
+  PriceText,
+  PriceTotal,
+  TextBox,
+  TotalBox,
+} from './CartPage.styled';
 
 const CartPage = () => {
   const dispatch = useDispatch();
 
-  const { selectedItems, amount, total, pizzaArr } = useSelector(state => state.cart);
+  const { selectedItems, total, formData } = useSelector(state => state.cart);
 
-useEffect(() => {
-  dispatch(calculateTotal())
-}, [dispatch, pizzaArr, amount])
+  useEffect(() => {
+    dispatch(calculateTotal());
+  }, [dispatch, selectedItems]);
   return (
     <Container>
-      {amount !== 0 ? (
+      {selectedItems.length > 0 ? (
         <>
-          <PizzaList ItemsArr={selectedItems} />
-          <div>
-            <PriceText variant="h4">
-              Total price: <PriceTotal>{total} UAH</PriceTotal>
-            </PriceText>
-          </div>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => dispatch(clearCart())}
-            >
-              Make an order
-            </Button>
-          </Box>
+          <ShopDrawer />
+          <TotalBox>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <PriceText variant="h4">
+                Total price: <PriceTotal>{total} UAH</PriceTotal>
+              </PriceText>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => createOrder(formData, selectedItems)}
+              >
+                Make an order
+              </Button>
+            </Box>
+          </TotalBox>
         </>
       ) : (
         <TextBox>

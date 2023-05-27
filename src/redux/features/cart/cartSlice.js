@@ -1,91 +1,89 @@
 import { createSlice } from '@reduxjs/toolkit';
-import products from '../../../products';
+import { toast } from 'react-hot-toast';
 
 const initialState = {
-  pizzaArr: products,
   total: 0,
   amount: 0,
   selectedItems: [],
+  products: [],
+  formData: {},
+  selectedShop: '',
+  isLoading: false,
 };
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    increase: (state, { payload }) => {
-      const index = state.pizzaArr.findIndex(item => item.id === payload);
-      state.pizzaArr[index].number++;
-      state.amount++;
-    //   const cartItem = state.selectedItems.find(item => item.id === payload);
-    // cartItem.number++;
-      // console.log(cartItem.number);
+    makeOrder: (state, {payload}) => {
+      if(Object.keys(state.formData).length === 0) {
+        return toast.error("Please enter your data before order")
+      }
+      toast.success("Your order accepted!");
+    },
+    selectShop: (state, {payload}) => {
+      state.selectedShop = payload;
+    },
 
+    getProducts:(state, {payload}) => {
+      state.products = payload;
+    },
+    increase: (state, { payload }) => {
+      const itemInCart = state.selectedItems.find(item => item.id === payload);
+      const productsItem = state.products.find(item => item._id === payload);
+      itemInCart.amount++;
+      productsItem.amount++;
     },
     decrease: (state, { payload }) => {
-      const index = state.pizzaArr.findIndex(item => item.id === payload);
-      state.amount--;
-       if (state.pizzaArr[index].number > 1) {
-        state.pizzaArr[index].number--;
-        // state.amount--;
-        console.log(state.pizzaArr[index].number, 'minus number');
+      const itemInCart = state.selectedItems.find(item => item.id === payload);
+      const productsItem = state.products.find(item => item._id === payload);
+      if(itemInCart.amount > 1) {
+        itemInCart.amount--;
+        productsItem.amount--;
+      } else {
+        productsItem.amount = 0;
+        state.selectedItems = state.selectedItems.filter(item => item.id !== payload)
+      }
+    },
+    AddProduct: (state, {payload}) => {
+      const itemInCart = state.selectedItems.find(item => item.id === payload.id);
+      const productsItem = state.products.find(item => item._id === payload.id);
+
+      if (itemInCart) {
+        itemInCart.amount++;
         
       } else {
-        state.selectedItems = state.selectedItems.filter(item => item.id !== payload);
-        state.pizzaArr[index].number = 0;
-        // state.amount--;
-        console.log(state.selectedItems);
-        
+        state.selectedItems.push({ ...payload, amount: 1 });
       }
-      // const cartItem = state.selectedItems.find(item => item.id === payload);
-      // if(cartItem.number === 1) {
-      //   cartItem.number = 1;
-      // } else {
-      //   cartItem.number--;
-      // }
-
-    },
-    AddPizza: (state, {payload}) => {
-      const index = state.pizzaArr.findIndex(item => item.id === payload);
-      
-      // const cartItem = state.selectedItems.find(item => item.id === payload);
-      state.pizzaArr[index].number = 1;
-      state.amount++;
-      // console.log(cartItem);
-      // if (cartItem) {
-      //   return;
-      // } else {
-        state.selectedItems.push(state.pizzaArr[index]);
-      // }
-
+      productsItem.amount++;
     },
     calculateTotal: (state, { payload }) => {
       let totalPrice = 0;
-      state.pizzaArr.forEach(item => {
-        if(item.number) {
-          totalPrice += item.number * item.price;
+      state.selectedItems.forEach(item => {
+        if(item.amount) {
+          totalPrice += item.amount * item.price;
         }
-        
       });
       state.total = totalPrice;
     },
-    clearCart: (state, { payload }) => {
-      state.selectedItems = [];
-      state.amount = 0;
+    saveFormData: (state, { payload }) => {
+      if(state.formData.email === payload.email) {
+        toast.error("Your email already exists")
+        return;
+      }
+      state.formData = payload;
+      toast.success("Your data has been saved")
     },
-    removeItem: (state, {payload}) => {
-      const removedItem = state.selectedItems.filter((item) => item.id !== payload);
-      let itemNumber = state.pizzaArr.find(item => item.id === payload).number;
-
-        console.log(removedItem);
-        const newAmount = state.amount - itemNumber;
-        state.total = newAmount * removedItem.price;
-        state.selectedItems = removedItem;
-        state.amount = newAmount;
-        // itemNumber = 0;
-      },
+    startLoading: (state, {payload}) => {
+      state.isLoading = true;
+    },
+    finishLoading: (state, {payload}) => {
+  state.isLoading = false;
+    }
   },
 });
 
-export const { increase, decrease, AddPizza, calculateTotal, clearCart, removeItem, getProducts } =
+export const { increase, decrease, AddProduct, calculateTotal, startLoading, finishLoading, getProducts, saveFormData, selectShop, makeOrder } =
   cartSlice.actions;
+
 export default cartSlice.reducer;

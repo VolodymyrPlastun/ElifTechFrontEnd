@@ -1,33 +1,49 @@
-import CartPage from 'pages/CartPage';
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import { calculateTotal } from 'redux/features/cart/cartSlice';
-import PizzaPage from '../pages/PizzaPage';
-import Layout from './Layout';
-import {fetchProducts} from '../api';
+import { fetchPizza, fetchSushi, getAllProducts } from '../api';
+import Loader from './Loader';
+
+const CartPage = lazy(() => import('../pages/CartPage'));
+const ShopPage = lazy(() => import('../pages/ShopPage'));
 
 export const App = () => {
-  // const { pizzaArr } = useSelector(store => store.cart);
-  // const dispatch = useDispatch();
-const [pizzaArr, setPizzaArr] = useState([]);
-console.log("🚀 ~ file: App.jsx:14 ~ App ~ pizzaArr:", pizzaArr)
+  const { selectedShop, startLoading, finishLoading } = useSelector(
+    store => store.cart
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const getAllProducts = async () => {
-      const products = await fetchProducts();
-      setPizzaArr(products)
+    if (selectedShop === 'Sushi') {
+      getAllProducts(dispatch, fetchSushi);
+    } else {
+      getAllProducts(dispatch, fetchPizza);
     }
-    getAllProducts();
-  }, []);
+  }, [dispatch, finishLoading, selectedShop, startLoading]);
+
   return (
     <div>
       <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<PizzaPage />} />
-          <Route path="/cart" element={<CartPage />} />
-        </Route>
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<Loader />}>
+              <ShopPage />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={
+            <Suspense fallback={<Loader />}>
+              <CartPage />
+            </Suspense>
+          }
+        />
       </Routes>
+      <Toaster position="top-right" duration="5000" />
     </div>
   );
 };

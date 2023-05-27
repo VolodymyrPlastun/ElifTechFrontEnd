@@ -8,21 +8,24 @@ import {
   Typography,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { decrease, increase, AddPizza, removeItem } from 'redux/features/cart/cartSlice';
-import { Amount, Box, BtnBox, Img, PizzaCard } from './PizzaList.styled';
-import { useLocation } from 'react-router-dom';
+import {
+  AddProduct,
+  decrease,
+  increase
+} from 'redux/features/cart/cartSlice';
+import { Amount, Box, BtnBox, Img, PizzaCard } from './ProductsList.styled';
 
-const PizzaList = ({ ItemsArr }) => {
+const ProductsList = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
 
-  const { pizzaArr, selectedItems } = useSelector(state => state.cart);
-  // console.log(selectedItems);
+  const { products } = useSelector(state => state.cart);
+
+
   return (
     <div>
       <Grid container spacing={2}>
-        {ItemsArr.map(product => (
-          <Grid item xs={12} sm={6} md={4} key={product.id}>
+        {products.map(product => (
+          <Grid item xs={12} sm={6} md={4} key={product._id}>
             <PizzaCard style={{ height: '100%' }}>
               <Box>
                 <CardActionArea>
@@ -49,39 +52,37 @@ const PizzaList = ({ ItemsArr }) => {
                 </CardActionArea>
 
                 <CardActions sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                  {location.pathname === '/cart' && <>
-                  <Button 
-                        onClick={() => dispatch(removeItem(product.id))}
-                        variant="contained"
-                        size="small"
-                        color="primary">
-                          Remove
-                  </Button>
-                  </>}
-                  {!product.number ? (
+                  {product.amount < 1 ? (
                     <>
                       <Button
                         onClick={() => {
-                          dispatch(AddPizza(product.id))
+                          dispatch(
+                            AddProduct({
+                              id: product._id,
+                              title: product.title,
+                              description: product.description,
+                              image: product.image,
+                              price: product.price,
+                              amount: product.amount,
+                            })
+                          );
                         }}
                         variant="contained"
                         size="small"
                         color="primary"
                       >
                         Add to cart
-                      </Button>
+                      </Button>{' '}
                     </>
                   ) : (
                     <BtnBox>
-                      <Button onClick={() => dispatch(decrease(product.id))}>
+                      <Button onClick={() => dispatch(decrease(product._id))}>
                         <Remove />
                       </Button>
-                      <Amount>
-                      {pizzaArr.find(item => item.id === product.id)?.number}
-                      </Amount>
+                      <Amount>{product.amount}</Amount>
                       <Button
                         onClick={() => {
-                          dispatch(increase(product.id));
+                          dispatch(increase(product._id));
                         }}
                       >
                         <Add />
@@ -98,4 +99,4 @@ const PizzaList = ({ ItemsArr }) => {
   );
 };
 
-export default PizzaList;
+export default ProductsList;

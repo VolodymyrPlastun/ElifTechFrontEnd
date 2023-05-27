@@ -1,7 +1,8 @@
 import { Card, CardMedia } from '@mui/material';
 import styled from 'styled-components';
 
-export const Box = styled.div`
+export const TotalBox = styled.div`
+padding: 20px;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -29,7 +30,7 @@ export const TextBox = styled.div`
 `;
 
 export const Container = styled.div`
-  height: 100%;
+  height: 100vh;
 `;
 
 export const BtnBox = styled.div`
@@ -44,11 +45,16 @@ export const Amount = styled.p`
 `;
 
 export const PriceText = styled.h2`
-  display: flex;
-  justify-content: space-between;
+margin: 0;
+margin-right: 10px;
   color: #0288d1;
 `;
 
 export const PriceTotal = styled.span`
   margin-left: 10px;
 `;
+
+export const FormBox = styled.div`
+display: flex;
+justify-content: space-around;
+`
