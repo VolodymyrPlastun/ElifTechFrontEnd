@@ -1,19 +1,21 @@
 {
   "files": {
     "main.css": "/ElifTechFrontEnd/static/css/main.7acaea2f.css",
-    "main.js": "/ElifTechFrontEnd/static/js/main.5bbade6f.js",
-    "static/js/687.722dee67.chunk.js": "/ElifTechFrontEnd/static/js/687.722dee67.chunk.js",
-    "static/js/215.844492e4.chunk.js": "/ElifTechFrontEnd/static/js/215.844492e4.chunk.js",
-    "static/js/395.3c84cb5a.chunk.js": "/ElifTechFrontEnd/static/js/395.3c84cb5a.chunk.js",
+    "main.js": "/ElifTechFrontEnd/static/js/main.1006c212.js",
+    "static/js/122.3cabfd33.chunk.js": "/ElifTechFrontEnd/static/js/122.3cabfd33.chunk.js",
+    "static/js/35.084ea11e.chunk.js": "/ElifTechFrontEnd/static/js/35.084ea11e.chunk.js",
+    "static/js/152.f6787314.chunk.js": "/ElifTechFrontEnd/static/js/152.f6787314.chunk.js",
+    "static/js/468.8223ed9f.chunk.js": "/ElifTechFrontEnd/static/js/468.8223ed9f.chunk.js",
     "index.html": "/ElifTechFrontEnd/index.html",
     "main.7acaea2f.css.map": "/ElifTechFrontEnd/static/css/main.7acaea2f.css.map",
-    "main.5bbade6f.js.map": "/ElifTechFrontEnd/static/js/main.5bbade6f.js.map",
-    "687.722dee67.chunk.js.map": "/ElifTechFrontEnd/static/js/687.722dee67.chunk.js.map",
-    "215.844492e4.chunk.js.map": "/ElifTechFrontEnd/static/js/215.844492e4.chunk.js.map",
-    "395.3c84cb5a.chunk.js.map": "/ElifTechFrontEnd/static/js/395.3c84cb5a.chunk.js.map"
+    "main.1006c212.js.map": "/ElifTechFrontEnd/static/js/main.1006c212.js.map",
+    "122.3cabfd33.chunk.js.map": "/ElifTechFrontEnd/static/js/122.3cabfd33.chunk.js.map",
+    "35.084ea11e.chunk.js.map": "/ElifTechFrontEnd/static/js/35.084ea11e.chunk.js.map",
+    "152.f6787314.chunk.js.map": "/ElifTechFrontEnd/static/js/152.f6787314.chunk.js.map",
+    "468.8223ed9f.chunk.js.map": "/ElifTechFrontEnd/static/js/468.8223ed9f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7acaea2f.css",
-    "static/js/main.5bbade6f.js"
+    "static/js/main.1006c212.js"
   ]
 }
