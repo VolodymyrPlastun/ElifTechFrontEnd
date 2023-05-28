@@ -32,3 +32,15 @@ export const Amount = styled.p`
   font-size: 1.5rem;
   margin: 0;
 `;
+
+export const ChooseBox = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100%;
+`;
+
+export const Container = styled.div`
+height: 100vh;
+
+`;

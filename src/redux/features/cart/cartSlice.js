@@ -8,7 +8,10 @@ const initialState = {
   products: [],
   formData: {},
   selectedShop: '',
-  isLoading: false,
+  isActive: {
+    isPizzaActive: false,
+    isSushiActive: false
+  },
 };
 
 const cartSlice = createSlice({
@@ -16,13 +19,24 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     makeOrder: (state, {payload}) => {
-      if(Object.keys(state.formData).length === 0) {
-        return toast.error("Please enter your data before order")
+      state.isActive = {
+        isPizzaActive: false,
+        isSushiActive: false
       }
-      toast.success("Your order accepted!");
     },
     selectShop: (state, {payload}) => {
-      state.selectedShop = payload;
+      state.selectedShop = payload.shop;
+      if(payload.shop === 'pizza') {
+        state.isActive = {
+          isPizzaActive: false,
+          isSushiActive: true
+        }
+        } else if (payload.shop === 'sushi'){
+          state.isActive = {
+            isPizzaActive: true,
+            isSushiActive: false
+          }
+        }
     },
 
     getProducts:(state, {payload}) => {
@@ -44,6 +58,13 @@ const cartSlice = createSlice({
         productsItem.amount = 0;
         state.selectedItems = state.selectedItems.filter(item => item.id !== payload)
       }
+      if(state.selectedItems.length === 0) {
+        state.isActive = {
+          isPizzaActive: false,
+          isSushiActive: false
+        }
+      
+      }
     },
     AddProduct: (state, {payload}) => {
       const itemInCart = state.selectedItems.find(item => item.id === payload.id);
@@ -56,6 +77,17 @@ const cartSlice = createSlice({
         state.selectedItems.push({ ...payload, amount: 1 });
       }
       productsItem.amount++;
+      if(state.selectedShop === 'pizza') {
+        state.isActive = {
+          isPizzaActive: false,
+          isSushiActive: true
+        }
+        } else if (state.selectedShop === 'sushi'){
+          state.isActive = {
+            isPizzaActive: true,
+            isSushiActive: false
+          }
+        }
     },
     calculateTotal: (state, { payload }) => {
       let totalPrice = 0;
@@ -68,22 +100,16 @@ const cartSlice = createSlice({
     },
     saveFormData: (state, { payload }) => {
       if(state.formData.email === payload.email) {
-        toast.error("Your email already exists")
+        toast.error("Your email already saved")
         return;
       }
       state.formData = payload;
       toast.success("Your data has been saved")
     },
-    startLoading: (state, {payload}) => {
-      state.isLoading = true;
-    },
-    finishLoading: (state, {payload}) => {
-  state.isLoading = false;
-    }
   },
 });
 
-export const { increase, decrease, AddProduct, calculateTotal, startLoading, finishLoading, getProducts, saveFormData, selectShop, makeOrder } =
+export const { increase, decrease, AddProduct, calculateTotal, getProducts, saveFormData, selectShop, makeOrder } =
   cartSlice.actions;
 
 export default cartSlice.reducer;

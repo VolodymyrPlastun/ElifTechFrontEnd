@@ -32,12 +32,13 @@ export const createOrder = async (userData, selectedProducts) => {
       userData,
       selectedProducts,
     });
+    toast.success("Your order accepted!");
   } catch (error) {
     const errorMessage = error.response.data.message;
     if (errorMessage.includes('duplicate key error collection')) {
       toast.success('You are already registered, your order accepted');
     } else {
-      toast.error('Ошибка при создании заказа', error.message);
+      console.log(errorMessage);
     }
     
   }

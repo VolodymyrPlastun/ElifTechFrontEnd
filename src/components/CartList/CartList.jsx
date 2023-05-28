@@ -15,7 +15,6 @@ const CartList = () => {
   const dispatch = useDispatch();
 
   const { selectedItems } = useSelector(state => state.cart);
-  console.log(selectedItems);
 
   return (
     <div>

@@ -12,16 +12,19 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import CartForm from 'components/CartForm';
 import CartList from 'components/CartList';
-import ProductsList from 'components/ProductsList';
 import ShopsList from 'components/ShopsList';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { lazy, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { PageLink } from './ShopDrawer.styled';
+
+const ProductsList = lazy(() => import('../ProductsList'));
 
 function ShopDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { formData } = useSelector(store => store.cart);
 
   const location = useLocation();
   const drawerWidth = location.pathname === '/cart' ? 300 : 200;
@@ -68,7 +71,7 @@ function ShopDrawer(props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -78,8 +81,11 @@ function ShopDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h5" noWrap component="div">
             Good|Food
+          </Typography>
+          <Typography variant="p" noWrap component="div">
+            {formData.name && `Hello, ${formData.name}`}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -94,7 +100,7 @@ function ShopDrawer(props) {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, 
+            keepMounted: true,
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },

@@ -17,3 +17,10 @@ export const PageLink = styled(NavLink)`
     text-decoration: underline;
   }
 `;
+
+export const ChooseBox = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100%;
+`;

@@ -3,8 +3,9 @@ import ShopDrawer from 'components/ShopDrawer';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { calculateTotal } from 'redux/features/cart/cartSlice';
+import { calculateTotal, makeOrder } from 'redux/features/cart/cartSlice';
 import { createOrder } from '../../api';
+import { toast } from 'react-hot-toast';
 import {
   Container,
   PriceText,
@@ -21,6 +22,15 @@ const CartPage = () => {
   useEffect(() => {
     dispatch(calculateTotal());
   }, [dispatch, selectedItems]);
+
+  const order = () => {
+      if(Object.keys(formData).length === 0) {
+        toast.error("Please enter your data before order");
+        return;
+      }
+      createOrder(formData, selectedItems)
+      dispatch(makeOrder());
+  }
   return (
     <Container>
       {selectedItems.length > 0 ? (
@@ -34,7 +44,7 @@ const CartPage = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => createOrder(formData, selectedItems)}
+                onClick={() => order()}
               >
                 Make an order
               </Button>
@@ -44,7 +54,7 @@ const CartPage = () => {
       ) : (
         <TextBox>
           <Typography style={{ fontSize: '30px' }}>
-            Choose pizza <Link to="/">here</Link>
+            Choose products <Link to="/">here</Link>
           </Typography>
         </TextBox>
       )}
